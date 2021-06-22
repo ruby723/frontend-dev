@@ -1,0 +1,5 @@
+*.csv
+*.xls
+*.pdf
+#올리지 말아야하는 파일
+/.metadata/
