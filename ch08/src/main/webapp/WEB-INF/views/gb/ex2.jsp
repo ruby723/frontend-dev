@@ -12,6 +12,27 @@
 <script src="${pageContext.request.contextPath }/jquery/jquery-3.6.0.js" type="text/javascript"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
+var render = function(vo,mode){
+	html=
+		"<li data-no='" + vo.no + "'>" + 
+		"<strong>" + vo.name + "</strong>" +
+		"<p>" + vo.message + "</p>" +
+		"<strong></strong>" + 
+		"<a href='' data-no='" + vo.no + "'>삭제</a>" + 
+		"</li>";
+		
+		if(mode){
+			$("#list-guestbook").append(html);
+		} else {
+			$("#list-guestbook").prepend(html);
+		}
+		
+		/* $("#list-guestbook")[mode ? "append" : "prepend"](html); */
+}
+
+var listItemEJS = new EJS({
+	url: "${pageContext.request.contextPage}/ejs/listitem-template.ejs";
+});
 /*
 var fetch = function(){
 	$.ajax({
@@ -65,19 +86,11 @@ $(function(){
 			type: "post",
 			contentType: "application/json",   
 			data: JSON.stringify(vo),
-			success: function(response){
-				var vo = response.data;
-				
-				html =
-					"<li data-no='" + vo.no + "'>" + 
-						"<strong>" + vo.name + "</strong>" +
-						"<p>" + vo.message + "</p>" +
-						"<strong></strong>" + 
-						"<a href='' data-no='" + vo.no + "'>삭제</a>" + 
-					"</li>";
-					
-				$("#list-guestbook").prepend(html);	
-			}
+			success: function(e){
+				// render(vo,false);
+				var html = listItemEJS.render(vo);
+				$("#list-guestbook").prepend(html)
+;			}
 		});		
 		
 	})
